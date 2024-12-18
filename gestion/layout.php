@@ -13,7 +13,7 @@
     <title>ChefCuisine</title>
     <link rel="icon" href="../images/logo1.png" type="image/png">
 
-
+    <link href="https://fonts.googleapis.com/css2?family=Merienda:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"> <!-- icon reseau sociaux-->
@@ -44,7 +44,7 @@
                        Mes Reservations
                 </a>
                 
-                <a href="Dashboard.php"
+                <a href="Dashboard_chef.php"
                     class="text-white flex   justify-center  items-center m-2 w-2/3 border-2  cursor-pointer border-[#FEA116]  rounded-lg   hover:scale-[1.1]  hover:text-gray-800">
                      Dashboard
                 </a>

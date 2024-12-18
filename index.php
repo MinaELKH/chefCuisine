@@ -25,7 +25,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
   </head>
-  <body class="bg-gray-100 font-merienda mx-16">
+  <body class="bg-gray-100 font-merienda lg:mx-16 px-2.5">
     <!-- Navbar -->
     <nav
       class="bg-gray-900 text-white px-4 lg:px-8 py-3 flex justify-between items-center"
@@ -71,19 +71,14 @@
       <div
         class="container mx-auto flex flex-col lg:flex-row items-center justify-between"
       >
-        <div class="lg:w-1/2 text-center lg:text-left space-y-6">
+        <div class="lg:w-1/2 text-center lg:text-left space-y-6 p-2.5">
           <h1 class="text-4xl lg:text-6xl font-bold leading-tight">
             Profitez de nos repas délicieux 
           </h1>
           <p class="text-white leading-relaxed">
-            Découvrez l'excellence gastronomique avec notre chef de cuisine passionné. Offrez à vos papilles une expérience inoubliable à travers des plats créatifs, préparés avec soin et passion. Rejoignez-nous pour un voyage culinaire exceptionnel où chaque bouchée raconte une histoire.
+            Découvrez l'excellence gastronomique avec notre chef de cuisine passionné. Offrez à vos papilles une expérience inoubliable à travers des plats créatifs.
           </p>
-          <a
-            href="#"
-            class="bg-primary py-3 px-6 text-white rounded shadow-md hover:bg-blue-600"
-          >
-            Book A Table
-          </a>
+      
         </div>
       <!-- <div class="lg:w-1/2 flex justify-center lg:justify-end">
           <img

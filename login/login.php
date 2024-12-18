@@ -14,6 +14,7 @@
         Connectez-vous à votre compte
       </h1>
       <div class="w-full mt-8">
+        <form  action="../index.php"  method="post">
         <div class="mx-auto max-w-xs sm:max-w-md md:max-w-lg flex flex-col gap-4">
           <div>
             <label for="email" class="text-white">Email :</label>
@@ -29,7 +30,7 @@
               type="password"
               placeholder="Votre mot de passe" />
           </div>
-          <button class="mt-5 tracking-wide font-semibold bg-[#FEA116] text-gray-100 w-full py-4 rounded-lg hover:bg-[#E9522C]/90 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
+          <button type="submit" name="connecter" class="mt-5 tracking-wide font-semibold bg-[#FEA116] text-gray-100 w-full py-4 rounded-lg hover:bg-[#E9522C]/90 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
             <svg class="w-6 h-6 -ml-2" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
               <circle cx="8.5" cy="7" r="4" />
@@ -44,8 +45,36 @@
             </a>
           </p>
         </div>
+</form>
       </div>
     </div>
   </div>
+
+  <?php
+
+require("../db/db.php");
+   
+  if(isset($_POST["connecter"])){
+       $email = mysqli_real_escape_string($_POST["email"]) ;
+       $query = "select * from users where email = ? " ;
+       $stmt = mysqli_prepare($conn , $query) ; 
+       mysqli_stmt_bind_param($stmt , 's' , $email ) ;
+       
+       if(mysqli_stmt_execute($stmt)){
+        mysqli_stmt_bind_result($stmt , $id ,$nom ,$email , $mdp , $id_role) ; 
+        mysqli_stmt_fetch($stmt) ; 
+
+       }
+       mysqli_stmt_close($stmt);
+
+
+  }
+   
+
+  
+  
+  
+  
+  ?>
 </body>
 </html>
