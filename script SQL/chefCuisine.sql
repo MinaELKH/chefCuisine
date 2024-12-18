@@ -46,15 +46,6 @@ CREATE TABLE reservation (
 
 
 
--- modification de role 
-
---create table role (id int(11) PRIMARY key AUTO_INCREMENT , 
-                   -- role varchar(10)  NOT null	);
-
---alter table users drop COLUMN role ;        
-
---alter table users ADD id_role int(11) NOT null REFERENCES role(id);
-
 
 
 insert into role(1 , "admin") ; 
