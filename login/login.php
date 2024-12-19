@@ -50,31 +50,55 @@
     </div>
   </div>
 
+ 
+
   <?php
-
+session_start();
 require("../db/db.php");
-   
-  if(isset($_POST["connecter"])){
-       $email = mysqli_real_escape_string($_POST["email"]) ;
-       $query = "select * from users where email = ? " ;
-       $stmt = mysqli_prepare($conn , $query) ; 
-       mysqli_stmt_bind_param($stmt , 's' , $email ) ;
-       
-       if(mysqli_stmt_execute($stmt)){
-        mysqli_stmt_bind_result($stmt , $id ,$nom ,$email , $mdp , $id_role) ; 
-        mysqli_stmt_fetch($stmt) ; 
 
-       }
-       mysqli_stmt_close($stmt);
+if (isset($_POST["connecter"]) && !empty($_POST["email"]) && !empty($_POST["password"])) {
+    $email = mysqli_real_escape_string($conn, $_POST["email"]);
+    $password = mysqli_real_escape_string($conn, $_POST["password"]);
+
+    $query = "SELECT id_user, nom, mdp  ,id_role FROM users WHERE email = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, 's', $email);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_store_result($stmt);
+
+    if (mysqli_stmt_num_rows($stmt)) {
+        mysqli_stmt_bind_result($stmt, $id, $nom, $pwd ,$id_role);
+        mysqli_stmt_fetch($stmt);
+
+        if (password_verify($password, $pwd)) {
+          //client
+            session_regenerate_id();
+            $_SESSION['login'] = TRUE;
+            $_SESSION['name'] = $nom;
+            $_SESSION['id'] = $id;
+
+            echo 'Bienvenue  ' . htmlspecialchars($nom, ENT_QUOTES);
+           // echo "<br><p class='text-red-500 text-center'> role est" . $id_role ."</p>";
+                if($id_role==1) //admin
+                {
+                  echo "<p class='text-red-500 text-center'>admin.</p>";
+                  $_SESSION['role'] ="admin" ;
+                } else if ($id_role==2) {
+                  $_SESSION['role'] ="client" ;
+                  echo "<p class='text-red-500 text-center'>client</p>";
+                }
+        } else {
+            echo "<p class='text-red-500 text-center'>Veuillez vérifier votre mot de passe.</p>";
+        }
+    } else {
+        echo "<p class='text-red-500 text-center'>Veuillez vérifier votre email.</p>";
+    }
+    mysqli_stmt_close($stmt);
+}
+?>
 
 
-  }
-   
 
-  
-  
-  
-  
-  ?>
+
 </body>
 </html>

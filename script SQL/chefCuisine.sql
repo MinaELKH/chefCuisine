@@ -50,3 +50,10 @@ CREATE TABLE reservation (
 
 insert into role(1 , "admin") ; 
 insert into role(2 , "client") ; 
+
+
+INSERT INTO users (nom, email, mdp, id_role) 
+VALUES ('Maymon Malik', 'malik@gmail.com', '$2b$12$L01BvLqN5ZDhPYZ4EugVOuApt97A7lOsDzWhzrsU3vvrIMODiGDWu', 2); --mdp : malik
+
+
+INSERT INTO users (nom, email, mdp, id_role) VALUES ('jawad ousd' , 'jawad@gmail.com', '$2b$12$ZvJE/dEMOyDckl73cwYj9eZmNBuPjQ1SwiyRAz2ccMlQ0XC.0KqgK', 1); --mdp : ouss

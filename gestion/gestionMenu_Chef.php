@@ -2,7 +2,17 @@
 
 ob_start();
 $title = "Gestion des reservations";
+session_start() ;
+    if($_SESSION['role']!="admin"){ //admin
+      header("location: ../erreur.php") ;
+      exit ;
+    }
+    echo "<p class='bg-red-400'> hello login </p>" ;
 
+
+    require("../db/db.php");
+
+?>
 ?>
 
 <div class='listeTable' >
@@ -18,7 +28,16 @@ $title = "Gestion des reservations";
             </tr>
         </thead>
         <tbody>
-            <tr>
+        <?php 
+        $query = "SELECT * from menu " ; 
+        $stmt=mysqli_prepare($conn , $query);
+        mysqli_stmt_execute($stmt); 
+        mysqli_stmt_store_result($stmt);
+        if(mysqli_stmt_num_rows($stmt)>0){
+            mysqli_stmt_bind_result($stmt , $id , $nom , $archive , $prix);
+            mysqli_stmt_fetch($stmt) ;
+            while (row = mysqli)
+            echo '<tr>
                 <td>1</td>
                 <td>Menu 1</td>
                 <td>8.50</td>
@@ -28,26 +47,11 @@ $title = "Gestion des reservations";
                     <i class="fa-solid fa-trash" title="Supprimer"></i>
                 </td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>Menu 2</td>
-                <td>10.00</td>
-                <td>1</td>
-                <td class="actions">
-                    <i class="fa-solid fa-pen" title="Modifier"></i>
-                    <i class="fa-solid fa-trash" title="Supprimer"></i>
-                </td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>Menu3</td>
-                <td>12.50</td>
-                <td>0</td>
-                <td class="actions">
-                    <i class="fa-solid fa-pen" title="Modifier"></i>
-                    <i class="fa-solid fa-trash" title="Supprimer"></i>
-                </td>
-            </tr>
+           '}
+           else {
+            echo "<p class='bg-red-400'> Il y a pas de menu</p>" ;
+           }
+            ?>
         </tbody>
     </table>
 <div>
@@ -138,6 +142,7 @@ $title = "Gestion des reservations";
     </div>
 </div>
 <?php
+
 $content = ob_get_clean();
 include 'layout.php';
 ?>

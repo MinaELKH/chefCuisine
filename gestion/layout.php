@@ -48,10 +48,12 @@
                     class="text-white flex   justify-center  items-center m-2 w-2/3 border-2  cursor-pointer border-[#FEA116]  rounded-lg   hover:scale-[1.1]  hover:text-gray-800">
                      Dashboard
                 </a>
+
                 <a href="gestionMenu_Chef.php"
-                    class="text-white flex items-center justify-center m-2  w-2/3 border-2  cursor-pointer border-[#FEA116]  rounded-lg   hover:scale-[1.1]  hover:text-gray-800">
-                       Menus
+                    class="text-white flex   justify-center  items-center m-2 w-2/3 border-2  cursor-pointer border-[#FEA116]  rounded-lg   hover:scale-[1.1]  hover:text-gray-800">
+                     Menu
                 </a>
+         
                 <a href="gestionRes_Chef.php"
                     class="text-white flex items-center m-2  justify-center    w-2/3 border-2  cursor-pointer border-[#FEA116]  rounded-lg   hover:scale-[1.1]  hover:text-gray-800">
                       Reservations
@@ -80,12 +82,12 @@
                 </div>
                 <div id="menuBurger" class="lg:hidden bg-black text-white p-4 absolute w-1/3 top-10 right-0 hidden">
                     <nav class="flex flex-col items-center">
-                        <a href="index.php" class="hover:bg-white hover:text-black rounded px-3 py-1 mb-2">DashBoard</a>
-                        <a href="reservation.php"
+                        <a href="Dashboard_chef.php" class="hover:bg-white hover:text-black rounded px-3 py-1 mb-2">DashBoard</a>
+                        <a href="gestionRes_Chef.php"
                             class="hover:bg-white hover:text-black rounded px-3 py-1 mb-2">  gestion des Reservations</a>
-                        <a href="activite.php" class="hover:bg-white hover:text-black rounded px-3 py-1 mb-2">gestion des Menus
+                        <a href="gestionMenu_Chef.php" class="hover:bg-white hover:text-black rounded px-3 py-1 mb-2">gestion des Menus
                             Us</a>
-                        <a href="client.php" class="hover:bg-white hover:text-black rounded px-3 py-1 mb-2"> gestion des Profils</a>
+                        <a href="gestionRes_Client.php" class="hover:bg-white hover:text-black rounded px-3 py-1 mb-2"> Mes Reservations</a>
                     </nav>
                 </div>
                     <div class="lg:hidden ml-auto order-3">

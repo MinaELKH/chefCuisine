@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -26,7 +28,23 @@
 
   </head>
   <body class="bg-gray-100 font-merienda lg:mx-16 px-2.5">
-    <!-- Navbar -->
+  <?php
+session_start() ;
+if(isset($_SESSION['login'])){
+    if($_SESSION['role']=="admin"){ //admin
+      header("location: gestion/Dashboard_chef.php") ;
+      exit ;
+    }
+    echo "<p class='bg-red-400'> hello login </p>" ;
+}else{
+  echo "<p> oups </p>" ;
+}
+
+?>
+  
+  
+  
+  <!-- Navbar -->
     <nav
       class="bg-gray-900 text-white px-4 lg:px-8 py-3 flex justify-between items-center"
     >
@@ -59,7 +77,7 @@
             >
               <a href="login/login.php" class="block hover:bg-gray-700 p-2 rounded">se connecter</a>
               <a href="login/register.php" class="block hover:bg-gray-700 p-2 rounded">s'inscrire</a>
-              <a href="#" class="block hover:bg-gray-700 p-2 rounded">se deconnecter</a>
+              <a href="login/deconnecter.php" class="block hover:bg-gray-700 p-2 rounded">se deconnecter</a>
             </div>
           </div>
        
