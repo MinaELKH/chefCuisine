@@ -12,42 +12,60 @@ session_start() ;
 
     require("../db/db.php");
 
+     if(isset($_POST["archive"]))
+        $id = mysqli_real_escape_string($conn ,$_POST["id"]);
+        $query  = "UPDATE menu set archive='1' where id_menu = ?" ; 
+        $stmt = mysqli_prepare($conn  , $query) ;
+        mysqli_stmt_bind_param($stmt , "i" , $id) ; 
+        mysqli_stmt_execute($stmt); 
+        mysqli_stmt_close($stmt) ;
+    
 ?>
-?>
+
 
 <div class='listeTable' >
 <h2>Liste des Menus</h2>
     <table>
         <thead>
             <tr>
-                <th>ID Menu</th>
+                <th>Menu</th>
+                <th>REF Menu</th>
                 <th>Nom du Menu</th>
+                <th>Description</th>
                 <th>Prix (€)</th>
+                <th>Voir plats </th>
                 <th>Archivé</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         <?php 
-        $query = "SELECT * from menu " ; 
+        $query = "SELECT * from menu order by archive desc" ; 
         $stmt=mysqli_prepare($conn , $query);
         mysqli_stmt_execute($stmt); 
         mysqli_stmt_store_result($stmt);
         if(mysqli_stmt_num_rows($stmt)>0){
-            mysqli_stmt_bind_result($stmt , $id , $nom , $archive , $prix);
-            mysqli_stmt_fetch($stmt) ;
-            while (row = mysqli)
-            echo '<tr>
-                <td>1</td>
-                <td>Menu 1</td>
-                <td>8.50</td>
-                <td>0</td>
-                <td class="actions">
-                    <i class="fa-solid fa-pen" title="Modifier"></i>
-                    <i class="fa-solid fa-trash" title="Supprimer"></i>
+            mysqli_stmt_bind_result($stmt , $id , $nomMenu , $archive , $prix , $description , $urlPhoto);
+           //https://www.php.net/manual/fr/mysqli-stmt.fetch.php
+            while (mysqli_stmt_fetch($stmt) )
+            echo "<tr>
+                <td> <img src=$urlPhoto alt =$urlPhoto></td>
+                <td>$id</td>
+                <td>$nomMenu</td>
+                <td>$description</td>
+                <td>$prix</td>
+                 <td><span class='cursor-pointer' onclick='openModal(\"modalMenu\")'> Voir Plat </span></td>
+                <td>$archive</td>
+                <td class='actions'>
+                <form action='' method='post'>
+                    <input type='hidden' name='id' value=$id>
+                    <button type='submit' name='archive'>
+                        <i class='fa-regular fa-folder-open  cursor-pointer'></i>
+                    </button>
+                </form>
                 </td>
             </tr>
-           '}
+           " ; }
            else {
             echo "<p class='bg-red-400'> Il y a pas de menu</p>" ;
            }
@@ -57,7 +75,11 @@ session_start() ;
 <div>
 
 
-<div id="modal" class=" fixed inset-0 flex items-center z-50 justify-center bg-white bg-opacity-50">
+  
+
+
+<!--modal ajout menu-->
+<div id="modal" class=" hidden fixed inset-0 flex items-center z-50 justify-center bg-white bg-opacity-50">
     <div class="relative p-6 shadow-xl rounded-lg bg-white text-gray-900 overflow-y-auto lg:w-1/3">
         <span id="closeModal"
             class="absolute right-4 top-4 text-gray-600 hover:text-gray-900 cursor-pointer material-symbols-outlined text-2xl">
