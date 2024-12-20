@@ -25,7 +25,7 @@
     
     <script src='../js/burger.js' defer></script>
     <link rel="stylesheet" href="../css/style.css" />
-
+   
 
 </head>
 
@@ -33,16 +33,26 @@
     <div class=" flex ">
         <aside class="hidden lg:block   bg-[#0f172b]     border-2 border-orange-100 rounded-xl w-1/5 p-2 pt-10">
             <div class="">
+
                 <img class="  mx-auto  w-24 h-12 " src="../images/imgs/logo1.png"  alt="logo">
             </div>
             
 
             <nav id="menu"
-     class="hidden lg:flex flex-col justify-center mx-auto items-center align-center mt-10">
-    <?php
+     class="hidden lg:flex flex-col  gap-4 justify-center mx-auto items-center align-center mt-10">
+  
+  
+  <?php
     if ($_SESSION['role'] == "client") { // client
-        echo '<a href="gestionRes_Client.php"
-                class="text-white flex items-center justify-center gap-5 m-2 w-2/3 border-2 cursor-pointer border-[#FEA116] rounded-lg hover:scale-[1.1] hover:text-gray-800">
+        echo '
+        <a href="../index.php" class="flex items-center space-x-4 text-white">
+             <i class="fas fa-home"></i>
+            <span>Accueil</span>
+        </a>
+                
+        
+            <a href="gestionRes_Client.php"
+                class="text-white flex items-center justify-center gap-5 m-2 w-2/3  cursor-pointer border-[#FEA116] rounded-lg hover:scale-[1.1] hover:text-gray-800">
                   Mes Reservations
             </a>';
     } elseif ($_SESSION['role'] == "admin") { // Admin
