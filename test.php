@@ -20,7 +20,7 @@ $title = "Gestion des reservations";
             class="hidden text-sm font-semibold px-4 py-2 mb-4 text-red-700 bg-red-100 border border-red-400 rounded">
         </p>
 
-        <form action="submit_menu.php" method="post" id="platForm" class="grid grid-cols-2 gap-4">
+        <form action="" method="post" id="platForm" class="grid grid-cols-2 gap-4">
             <!-- Menu -->
             <div>
                 <label for="nomMenu" class="block font-medium mb-1">Nom du Menu</label>
@@ -34,7 +34,7 @@ $title = "Gestion des reservations";
             </div>
             <div>
                 <label for="descrptionu" class="block font-medium mb-1">Description</label>
-                <textarea  name="descrption" type="text" placeholder="Description"
+                <textarea  name="descriptionMenu" type="text" placeholder="Description"
                     class="inputformulaire w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm" required>
                     </textarea>
                 </div>
@@ -161,28 +161,41 @@ require("db/db.php");
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nomMenu = mysqli_real_escape_string($conn, $_POST["nomMenu"]);
     $prix = mysqli_real_escape_string($conn, $_POST["prix"]);
-    $description = mysqli_real_escape_string($conn, $_POST["description"]);
+    $descriptionMenu = mysqli_real_escape_string($conn, $_POST["descriptionMenu"]);
     $urlPhoto = mysqli_real_escape_string($conn, $_POST["urlPhoto"]);
 
     // Insertion du menu
     $queryMenu = "INSERT INTO menu (nomMenu, prix, description, urlPhoto) VALUES (?, ?, ?, ?)";
     $stmtMenu = mysqli_prepare($conn, $queryMenu);
-    mysqli_stmt_bind_param($stmtMenu, "ssss", $nomMenu, $prix, $description, $urlPhoto);
+    mysqli_stmt_bind_param($stmtMenu, "ssss", $nomMenu, $prix, $descriptionMenu, $urlPhoto);
     mysqli_stmt_execute($stmtMenu);
     $menu_id = mysqli_insert_id($conn);
 
     // Insertion des plats associés
-    if (isset($_POST['plats'])) {
-        foreach ($_POST['plats'] as $plat) {
-            $plat = mysqli_real_escape_string($conn, $plat);
-            $plat = mysqli_real_escape_string($conn, $plat);
-            $plat = mysqli_real_escape_string($conn, $plat);
-            $plat = mysqli_real_escape_string($conn, $plat);
-            $queryPlat = "INSERT INTO plat (id_menu, nomPlat) VALUES (?, ?)";
-            $stmtPlat = mysqli_prepare($conn, $queryPlat);
-            mysqli_stmt_bind_param($stmtPlat, "is", $menu_id, $plat);
-            mysqli_stmt_execute($stmtPlat);
-            mysqli_stmt_close($stmtPlat);
+    if (isset($_POST['plats']['nom'])) {
+        // Parcourir les données des plats
+        $noms = $_POST['plats']['nom'];
+        $categories = $_POST['plats']['categorie'];
+        $ingredients = $_POST['plats']['ingredient'];
+        $descriptions = $_POST['plats']['description'];
+        $photos = $_POST['plats']['photo'];
+    
+        for ($i = 0; $i < count($noms); $i++) {
+            // Assurez-vous que toutes les données pour ce plat sont définies
+            if (!empty($noms[$i]) && !empty($categories[$i]) && !empty($ingredients[$i]) && !empty($photos[$i])) {
+                $nomPlat = mysqli_real_escape_string($conn, $noms[$i]);
+                $categoriePlat = mysqli_real_escape_string($conn, $categories[$i]);
+                $ingredientPlat = mysqli_real_escape_string($conn, $ingredients[$i]);
+                $descriptionPlat = isset($descriptions[$i]) ? mysqli_real_escape_string($conn, $descriptions[$i]) : null;
+                $photoPlat = mysqli_real_escape_string($conn, $photos[$i]);
+    
+                // Insertion dans la table `plat`
+                $queryPlat = "INSERT INTO plat (id_menu, nom, categorie, ingredient, description, photo) VALUES (?, ?, ?, ?, ?, ?)";
+                $stmtPlat = mysqli_prepare($conn, $queryPlat);
+                mysqli_stmt_bind_param($stmtPlat, "isssss", $menu_id, $nomPlat, $categoriePlat, $ingredientPlat, $descriptionPlat, $photoPlat);
+                mysqli_stmt_execute($stmtPlat);
+                mysqli_stmt_close($stmtPlat);
+            }
         }
     }
 
