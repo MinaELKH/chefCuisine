@@ -15,6 +15,56 @@ session_start() ;
 
 
     require("../db/db.php");
+
+    if (isset($_POST["supprimer"])) {
+        if (isset($_POST['id_reservation']) && !empty($_POST['id_reservation'])) {
+            $id = mysqli_real_escape_string($conn, $_POST["id_reservation"]);
+            $statut = mysqli_real_escape_string($conn, $_POST["id_reservation"]);
+            if($statut != 'confirmée'){
+            $query = "DELETE FROM reservation WHERE id_reservation = ? AND statue_r != 'confirmée'";
+            $stmt = mysqli_prepare($conn, $query);
+            mysqli_stmt_bind_param($stmt, "i", $id);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
+            }
+        }
+    }
+
+    if (isset($_POST["editReservation"])) {
+        
+        if (isset($_POST['id_ref']) && !empty($_POST['id_ref'])) {
+            echo "<p class='bg-red-400'>EDDDDDDDDDDDDDDDDIttttttt </p>";
+            $id_reservation = mysqli_real_escape_string($conn, $_POST["id_ref"]);
+            $id_menu = trim(mysqli_real_escape_string($conn, $_POST["id_menu"]));
+            $date = trim(mysqli_real_escape_string($conn, $_POST["date"]));
+            $heure = trim(mysqli_real_escape_string($conn, $_POST["heure"]));
+            $nb_personne = trim(mysqli_real_escape_string($conn, $_POST["nb_personne"]));
+            $tel = trim(mysqli_real_escape_string($conn, $_POST["tel"]));
+            $msg = trim(mysqli_real_escape_string($conn, $_POST["message"]));
+
+            $query = "UPDATE reservation 
+            SET date_r = ? , 
+                heure_r=? ,
+                nb_personne_r = ? ,
+                id_menu = ? ,
+                tel = ? ,  
+                message = ?
+            WHERE id_reservation = ?
+            and statut_r = 'confirmée'";
+            $stmt = mysqli_prepare($conn, $query);
+            mysqli_stmt_bind_param($stmt, "ssiissi", $date, $heure, $nb_personne, $id_menu, $tel, $msg ,  $id_reservation );
+            if(mysqli_stmt_execute($stmt)){
+                echo "<p class='bg-red-400'>Modiffffffff</p>";
+            }else {
+                echo "<p class='bg-red-400'>ERREUR </p>";
+
+            };
+            mysqli_stmt_close($stmt);
+        }
+    }
+
+
+
 ?>
 <div class="flex justify-between lg:mx-20 mb-8 p-2 border-b-2 border-y-indigo-300">
   <h2 class="text-2xl text-indigo-800">
@@ -30,6 +80,7 @@ session_start() ;
     <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
         <thead class="bg-gray-200">
             <tr>
+                <th class="py-2 px-4 text-left">REF</th>
                 <th class="py-2 px-4 text-left">Menu</th>
                 <th class="py-2 px-4 text-left">Date</th>
                 <th class="py-2 px-4 text-left">Heure</th>
@@ -57,6 +108,7 @@ session_start() ;
                 echo "<tr>
                  <form action='' method='post'>
                  <input type='hidden' name='id_reservation' value='{$id}'>
+                 <td class='py-2 px-4'>$id</td>
                     <td class='py-2 px-4'>$nomMenu</td>
                     <td class='py-2 px-4'>$date</td>
                     <td class='py-2 px-4'>$heure</td>
@@ -68,9 +120,11 @@ session_start() ;
                    </form>
                    <form action='' method='post'>
                         <input type='hidden' name='id_reservation' value='{$id}'>
+                        <input type='hidden' name='statut' value='{$statut}'>
                         <button type='submit' name='supprimer'>
                          <i class='fa fa-trash' aria-hidden='true'></i>
-                        </button>
+                        </button>      
+                             <i class='fas fa-edit' aria-hidden='true' onclick='openModal(\"modal\" , $id )'></i>                   
                     </form>
                     </td>
                 
@@ -86,37 +140,79 @@ session_start() ;
 
 
 
-<div id="modal" class="fixed inset-0 flex items-center z-50 justify-center bg-white bg-opacity-50 p-4">
+<div id="modal" class="  hidden fixed inset-0 flex items-center z-50 justify-center bg-white bg-opacity-50 p-4">
     <div class="relative p-6 shadow-xl rounded-lg bg-white text-gray-900 w-full max-w-lg overflow-y-auto">
         <span id="closeModal" class="absolute right-4 top-4 text-gray-600 hover:text-gray-900 cursor-pointer material-symbols-outlined text-2xl"  onclick="closeModal('modal')">cancel</span>
         <h2 class="text-2xl font-bold mb-6 text-center text-yellow-500">Modifier Réservation</h2>
         <p id="editError" class="hidden text-sm font-semibold px-4 py-2 mb-4 text-red-700 bg-red-100 border border-red-400 rounded"></p>
         <form id="editReservationForm" class="flex flex-col gap-4" action="" method="POST">
-            <input id="edit_id" type="hidden" value="-1">
+            <input  name="id_ref" id="id_ref" type="hidden" value="">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label for="edit_date_r" class="block font-medium mb-1">Date</label>
-                    <input id="edit_date_r" name="date_r" type="date" class="inputformulaire w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm">
+                    <label for="date_r" class="block font-medium mb-1">Date</label>
+                    <input id="edit_date_r" name="date" type="date" class="inputformulaire w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm">
                 </div>
                 <div>
-                    <label for="edit_heure" class="block font-medium mb-1">Heure</label>
+                    <label for="heure_r" class="block font-medium mb-1">Heure</label>
                     <input id="edit_heure" name="heure" type="time" class="inputformulaire w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm">
                 </div>
                 <div>
-                    <label for="edit_nb_personne" class="block font-medium mb-1">Nombre de Personnes</label>
+                    <label for="nb_personne" class="block font-medium mb-1">Nombre de Personnes</label>
                     <input id="edit_nb_personne" name="nb_personne" type="number" min="1" class="inputformulaire w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm">
                 </div>
                 <div>
-                    <label for="edit_statut" class="block font-medium mb-1">Menu</label>
-                    <select id="edit_statut" name="statut" class="inputformulaire w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm">
-                        <option value="Menu1">Menu1</option>
-                        <option value="Menu2">Menu2</option>
-                        <option value="Menu3">Menu3</option>
-                    </select>
+                    <label for="menu" class="block font-medium mb-1">Menu</label>
+            
+
+<?php
+
+                    $query = "select id_menu ,  nomMenu from menu" ;
+                    $result = mysqli_query($conn,$query); 
+                  echo "<select name='id_menu'  class=' w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm'> 
+                        <option value='' disabled> Choisir Menu </option>" ; 
+
+                   while($row = mysqli_fetch_assoc($result)){
+                
+                    echo" <option value={$row["id_menu"]}> {$row["nomMenu"]}  </option>" ; 
+                    }
+                    echo "</select>" ; 
+
+
+
+?>
+
+
+
+
+
+
+
+
                 </div>
+
+
+                <div>
+                        <label for='tel' class='text-gray-900'>Téléphone :</label>
+                        <input  name='tel'
+                        class='w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-primary'
+                          type='tel'
+                          placeholder='Votre numéro de téléphone' />
+                      </div>
+                      <!-- Special Request -->
+                      <div class=''>
+                        <label for='message' class='text-gray-900'
+                          >Message</label
+                        >
+                        <textarea
+                          class='form-control w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-primary'
+                          name='message'
+                          placeholder='Message'
+                          style='height: 100px'
+                        ></textarea>
+                      </div>
             </div>
             <div class="flex justify-center">
-                <button type="submit" name="editReservation" id="submitEditReservation" class="w-full bg-[#7F020F] hover:bg-red-700 text-white font-bold py-2 rounded-lg">Valider</button>
+                <button type="submit" name="editReservation"  class="w-full bg-[#7F020F] hover:bg-red-700 text-white font-bold py-2 rounded-lg">Valider</button>
             </div>
         </form>
     </div>

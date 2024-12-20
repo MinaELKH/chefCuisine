@@ -15,6 +15,7 @@ $title = "Gestion des reservations";
      if(isset($_POST["archive"]))
       {  $id = mysqli_real_escape_string($conn ,$_POST["id"]);
         $query  = "UPDATE menu set archive='1' where id_menu = ?" ; 
+        
         $stmt = mysqli_prepare($conn  , $query) ;
         mysqli_stmt_bind_param($stmt , "i" , $id) ; 
         mysqli_stmt_execute($stmt); 
@@ -90,97 +91,177 @@ $title = "Gestion des reservations";
         </tbody>
     </table>
 <div>
+<div id="modal" class=" hidden fixed inset-0 flex items-center z-50 justify-center bg-white bg-opacity-50  ">
+     <div class="relative p-6   border-gray-300  border-2 shadow-xl rounded-lg bg-white text-gray-900 overflow-y-auto lg:w-1/3 max-h-[calc(100vh-210px)] ">
 
-
-  
-
-
-<!--modal ajout menu-->
-<div id="modal" class=" hidden fixed inset-0 flex items-center z-50 justify-center bg-white bg-opacity-50">
-    <div class="relative p-6 shadow-xl rounded-lg bg-white text-gray-900 overflow-y-auto lg:w-1/3">
         <span id="closeModal"
             class="absolute right-4 top-4 text-gray-600 hover:text-gray-900 cursor-pointer material-symbols-outlined text-2xl"
-            onclick='closeModal("modal")'>
-            cancel
+           onclick='closeModal("modal")'
+            >
+          close
         </span>
         <h2 class="text-2xl font-bold mb-6 text-center text-yellow-500">Ajouter un Menu</h2>
         <p id="errorMsg"
             class="hidden text-sm font-semibold px-4 py-2 mb-4 text-red-700 bg-red-100 border border-red-400 rounded">
-            </p>
-    
-            <div class="flex justify-end">
-    <button type="button"
-        class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded-lg">
-        +
-    </button>
-</div>
-            <form id="platForm" class="grid grid-cols-2 gap-4">
-                <!--  menu -->
+        </p>
+
+        <form action="" method="post" id="platForm" class="grid grid-cols-2 gap-4">
+            <!-- Menu -->
             <div>
                 <label for="nomMenu" class="block font-medium mb-1">Nom du Menu</label>
-                <input id="nomMenu" name="nomMenu" type="text" placeholder="Nom du menu"
-                    class="inputformulaire w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm">
+                <input  name="nomMenu" type="text" placeholder="Nom du menu"
+                    class="inputformulaire w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm" required>
             </div>
             <div>
                 <label for="prix" class="block font-medium mb-1">Prix Total (€)</label>
-                <input id="prix" name="prix" type="number" step="0.01" placeholder="Prix du menu"
-                    class="inputformulaire w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm">
+                <input name="prix" type="number" step="0.01" placeholder="Prix du menu"
+                    class="inputformulaire w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm" required>
             </div>
-
-                    <!--plat-->
-                    <div class=" col-span-2 border-2 border-orange-100 grid grid-cols-2 gap-4 p-2.5">
-                                <!-- Nom du plat -->
-                                <div class="col-span-2 md:col-span-1">
-                                    <label for="nom" class="block text-sm font-medium text-gray-700">Nom du Plat</label>
-                                    <input id="nom" name="nom" type="text" placeholder="Ex: Pizza Margherita"
-                                        class="w-full p-2 border border-gray-300 rounded-lg" required>
-                                </div>
-
-                                <!-- Catégorie -->
-                                <div class="col-span-2 md:col-span-1">
-                                    <label for="categorie" class="block text-sm font-medium text-gray-700">Catégorie</label>
-                                    <input id="categorie" name="categorie" type="text" placeholder="Ex: Plat principal, Dessert"
-                                        class="w-full p-2 border border-gray-300 rounded-lg" required>
-                                </div>
-
-                                <!-- Ingrédients -->
-                                <div class="col-span-2">
-                                    <label for="ingredient" class="block text-sm font-medium text-gray-700">Ingrédients</label>
-                                    <textarea id="ingredient" name="ingredient" rows="3" placeholder="Ex: Tomates, fromage, basilic"
-                                        class="w-full p-2 border border-gray-300 rounded-lg" required></textarea>
-                                </div>
-
-                                <!-- Description -->
-                                <div class="col-span-2">
-                                    <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                                    <textarea id="description" name="description" rows="3" placeholder="Description facultative"
-                                        class="w-full p-2 border border-gray-300 rounded-lg"></textarea>
-                                </div>
-
-                                <!-- Photo -->
-                                <div class="col-span-2">
-                                    <label for="photo" class="block text-sm font-medium text-gray-700">Photo</label>
-                                    <input id="photo" name="photo" type="file" accept="image/*"
-                                        class="w-full p-2 border border-gray-300 rounded-lg" required>
-                                </div>
+            <div>
+                <label for="descrptionu" class="block font-medium mb-1">Description</label>
+                <textarea  name="descriptionMenu" type="text" placeholder="Description"
+                    class="inputformulaire w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm" required>
+                    </textarea>
+                </div>
+            <div>
+                <label for="photo" class="block font-medium mb-1">Photo</label>
+                <input  name="urlPhoto" type="number" step="0.01" placeholder="Prix du menu"
+                    class="inputformulaire w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm" required>
+            </div>
+            <!-- Plat -->
+            <div id="divPlats" class="col-span-2 flex flex-col gap-2.5 ">
+          
+                <div id="firstplat" class="relative bg-gray-300 border-2 border-orange-100 grid grid-cols-2 gap-4 p-2.5">
+                <span 
+                class=" removePlat absolute right-1 top-1 text-red-600 hover:text-gray-900 cursor-pointer material-symbols-outlined text-xl">
+            cancel
+        </span>
+                
+                <!-- Nom du plat -->
+                    <div class="col-span-2 md:col-span-1">
+                        <label for="nom" class="block text-sm font-medium text-gray-700">Nom du Plat</label>
+                        <input id="nom" name="plats[nom][]" type="text" placeholder="Ex: Pizza Margherita"
+                            class="w-full p-2 border border-gray-300 rounded-lg" required>
                     </div>
 
-                         <!-- Bouton Ajouter -->
-                        <div class="col-span-2">
-                            <button type="submit"
-                                class="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 focus:outline-none">
-                                Ajouter le Menu
-                            </button>
-                        </div>
-        </form>
-               
+                    <!-- Catégorie -->
+                    <div class="col-span-2 md:col-span-1">
+                        <label for="categorie" class="block text-sm font-medium text-gray-700">Catégorie</label>
+                        <input id="categorie" name="plats[categorie][]" type="text" placeholder="Ex: Plat principal, Dessert"
+                            class="w-full p-2 border border-gray-300 rounded-lg" required>
+                    </div>
+
+                    <!-- Ingrédients -->
+                    <div class="col-span-2">
+                        <label for="ingredient" class="block text-sm font-medium text-gray-700">Ingrédients</label>
+                        <textarea id="ingredient" name="plats[ingredient][]" rows="3" placeholder="Ex: Tomates, fromage, basilic"
+                            class="w-full p-2 border border-gray-300 rounded-lg" required></textarea>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="col-span-2">
+                        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea id="description" name="plats[description][]" rows="3" placeholder="Description facultative"
+                            class="w-full p-2 border border-gray-300 rounded-lg"></textarea>
+                    </div>
+
+                    <!-- Photo -->
+                    <div class="col-span-2">
+                        <label for="photo" class="block text-sm font-medium text-gray-700">Photo</label>
+                        <input id="photo" name="plats[photo][]" type="file" accept="image/*"
+                            class="w-full p-2 border border-gray-300 rounded-lg" required>
+                    </div>
                 </div>
             </div>
 
-            
+            <div class="col-span-2 flex justify-between gap-8">
+                <button type="submit"
+                    class="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 focus:outline-none">
+                    Ajouter le Menu
+                </button>
+                <button type="button" id="addPlat_Btn"
+                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded-lg">
+                    +
+                </button>
+            </div>
         </form>
     </div>
 </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const divPlats = document.getElementById('divPlats');
+            const addPlat_Btn = document.getElementById('addPlat_Btn');
+            const firstplat = document.getElementById('firstplat');
+            firstplat.querySelector('.removePlat').addEventListener('click', function() {
+                    divPlats.removeChild(firstplat);
+                });
+            addPlat_Btn.addEventListener('click', function() {
+                const newPlat = document.createElement('div');
+                newPlat.className = 'relative bg-gray-300 border-2 border-orange-100 grid grid-cols-2 gap-4 p-2.5';
+                newPlat.innerHTML = ` 
+                    <!-- Nom du plat -->
+                     <span 
+            class=" removePlat absolute right-1 top-1 text-red-600 hover:text-gray-900 cursor-pointer material-symbols-outlined text-xl">
+            cancel
+        </span>
+                    <div class="col-span-2 md:col-span-1">
+                        <label for="nom" class="block text-sm font-medium text-gray-700">Nom du Plat</label>
+                        <input  name="plats[nom][]" type="text" placeholder="Ex: Pizza Margherita"
+                            class="w-full p-2 border border-gray-300 rounded-lg" required>
+                    </div>
+
+                    <!-- Catégorie -->
+                    <div class="col-span-2 md:col-span-1">
+                        <label for="categorie" class="block text-sm font-medium text-gray-700">Catégorie</label>
+                        <input name="plats[categorie][]" type="text" placeholder="Ex: Plat principal, Dessert"
+                            class="w-full p-2 border border-gray-300 rounded-lg" required>
+                    </div>
+
+                    <!-- Ingrédients -->
+                    <div class="col-span-2">
+                        <label for="ingredient" class="block text-sm font-medium text-gray-700">Ingrédients</label>
+                        <textarea  name="plats[ingredient][]" rows="3" placeholder="Ex: Tomates, fromage, basilic"
+                            class="w-full p-2 border border-gray-300 rounded-lg" required></textarea>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="col-span-2">
+                        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea name="plats[description][]" rows="3" placeholder="Description facultative"
+                            class="w-full p-2 border border-gray-300 rounded-lg"></textarea>
+                    </div>
+
+                    <!-- Photo -->
+                    <div class="col-span-2">
+                        <label for="photo" class="block text-sm font-medium text-gray-700">Photo</label>
+                        <input  name="plats[photo][]" type="file" accept="image/*"
+                            class="w-full p-2 border border-gray-300 rounded-lg" required>
+                    </div>
+                `;
+                divPlats.appendChild(newPlat);
+
+                // Ajout de l'écouteur d'événements de suppression
+                newPlat.querySelector('.removePlat').addEventListener('click', function() {
+                    divPlats.removeChild(newPlat);
+                });
+            });
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <?php
 
 $content = ob_get_clean();
