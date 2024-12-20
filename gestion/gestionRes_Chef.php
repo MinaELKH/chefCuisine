@@ -37,7 +37,12 @@ session_start() ;
 
 
 ?>
+<div class="flex justify-between lg:mx-20 mb-8 p-2 border-b-2 border-y-indigo-300">
+  <h2 class="text-2xl text-indigo-800">
+    <?php echo $title; ?>
+  </h2>
 
+    </div>
 
 <div class='listeTable'>
   

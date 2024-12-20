@@ -1,5 +1,13 @@
 
 <?php
+session_start() ;
+if($_SESSION['role']!="admin"){ //client
+  header("location: ../erreur.php") ;
+  exit ;
+}
+else if($_SESSION['role'] =="admin"){
+   $id_admin = $_SESSION['id'] ; 
+}
 include '../db/db.php';
 ob_start(); 
 $title = "DASHBORD";
@@ -98,39 +106,38 @@ $total_inscrit = $row3['total_inscrit'];
 
 //Détails du prochain client et de sa réservation.
 
-$query = ("SELECT r.*  ,  u.nom , m.nomMenu  , m.prix , m.description 
-                  FROM reservation as r 
-                  inner join users as u on r.id_user = u.id_user 
-                  inner join menu as m on r.id_menu = m.id_menu
-         
-                    where date_r >= CURRENT_DATE()
-                    and TIME(heure_r) >= CURTIME()
-                    and statut_r = 'confirmée'
-                    order by date_r ASC , heure_r ASC 
-                    limit 1 ") ;
+$query = ("SELECT r.* , u.nom , m.nomMenu , m.prix , m.description  , m.urlPhoto
+          FROM reservation as r 
+          INNER JOIN users as u ON r.id_user = u.id_user 
+          INNER JOIN menu as m ON r.id_menu = m.id_menu
+          WHERE date_r >= CURRENT_DATE() 
+            AND STR_TO_DATE(CONCAT(date_r, ' ', heure_r), '%Y-%m-%d %H:%i:%s') >= NOW()   ##  convertir : heure est intreprete comme string   il est stocké sous forme de chaîne de caractères au lieu d'un format de date/heure complet comme datetime.
+            AND statut_r = 'confirmée'
+          ORDER BY date_r ASC, heure_r ASC 
+          LIMIT 1;") ;
 
 $stmt=mysqli_prepare($conn ,$query) ;
 mysqli_stmt_execute($stmt) ; 
 mysqli_stmt_store_result($stmt) ;
 if (mysqli_stmt_num_rows($stmt) > 0){
-mysqli_stmt_bind_result($stmt  ,  $id, $date, $heure, $nb_personne,    $statut ,$id_user , $id_menu,  $tel ,$message , $archive , $nomUser , $nomMenu , $prix ,$description) ;
+mysqli_stmt_bind_result($stmt  ,  $id, $date, $heure, $nb_personne,    $statut ,$id_user , $id_menu,  $tel ,$message , $archive , $nomUser , $nomMenu , $prix ,$description , $urlphoto) ;
 mysqli_stmt_fetch($stmt) ;
 
 
   echo" 
   <div>
-    <img src='path/to/menu-photo.jpg' alt='Menu Photo' class='w-full h-32 object-cover rounded-lg mb-2'>
+    <img src='../{$urlphoto}' alt='Menu Photo' class='w-full h-64 object-cover rounded-lg mb-2'>
   </div> 
-    <div class=''>
+    <div class='flex flex-col gap-2.5 text-xl  text-center'>
       
-        <h4 class='text-xl font-merienda text-center text-indigo-500'>Menu  :  $nomMenu </h4>
-        <ul class='text-left text-lg'>
-            <li>\${$prix}</li>
-            <li>{$description}</li>
-        </ul>
+        <h4 class=' font-merienda text-center text-indigo-500'>Menu  :  $nomMenu </h4>
+
+        <p class='text-lg' > \$ {$prix}</p>
+            <p class='text-lg'>{$description}</p>
+      
     </div>
   
-  <div class=''>
+  <div class='text-xl  '>
    <h4 class='text-xl font-merienda text-center text-indigo-500'>Reservation</h4>
         <p class='text-lg'>Nom du client : {$nomUser}</p>
         <p class='text-lg' >Date de la réservation : {$date}</p>

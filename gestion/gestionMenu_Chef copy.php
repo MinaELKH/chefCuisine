@@ -1,15 +1,18 @@
 <?php
 
 ob_start();
-$title = "Gestion des Menus ";
-session_start() ;
+$title = "Gestion des reservations";
+/*session_start() ;
     if($_SESSION['role']!="admin"){ //admin
       header("location: ../erreur.php") ;
       exit ;
     }
+    echo "<p class='bg-red-400'> hello login </p>" ;
+
+*/
     require("../db/db.php");
-   // require("../uploadImage.php");
-     if( $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["archive"]))
+    require("../uploadImage.php");
+     if(isset($_POST["archive"]))
       {  $id = mysqli_real_escape_string($conn ,$_POST["id"]);
         $query  = "UPDATE menu set archive='1' where id_menu = ?" ; 
 
@@ -17,40 +20,6 @@ session_start() ;
         mysqli_stmt_bind_param($stmt , "i" , $id) ; 
         mysqli_stmt_execute($stmt); 
         mysqli_stmt_close($stmt) ;}
-
-
-function uploadImage($file, $uploadsDir = '../uploads/', $maxSize = 2 * 1024 * 1024, $allowedTypes = ['image/jpeg', 'image/png', 'image/gif']) {
-    if (isset($file) && $file['error'] === UPLOAD_ERR_OK) {
-        $photoTmpName = $file['tmp_name'];
-        $photoName = basename($file['name']);
-        $photoSize = $file['size'];
-        $photoType = mime_content_type($photoTmpName);
-
-        // Vérification du type
-        if (!in_array($photoType, $allowedTypes)) {
-            return ['success' => false, 'message' => "Type de fichier non supporté. Veuillez utiliser JPEG, PNG ou GIF."];
-        }
-
-        // Vérification de la taille
-        if ($photoSize > $maxSize) {
-            return ['success' => false, 'message' => "Le fichier est trop volumineux. Limite de " . ($maxSize / (1024 * 1024)) . " Mo."];
-        }
-
-        // Création du chemin d'enregistrement avec un nom unique
-        $photoPath = $uploadsDir . uniqid() . '-' . $photoName;
-
-        // Déplacement du fichier
-        if (move_uploaded_file($photoTmpName, $photoPath)) {
-            return ['success' => true, 'filePath' => $photoPath];
-        } else {
-            return ['success' => false, 'message' => "Erreur lors de l'upload de l'image."];
-        }
-    } else {
-        return ['success' => false, 'message' => "Aucun fichier sélectionné ou erreur lors de l'upload."];
-    }
-}
-
-
     
 ?>
 
@@ -82,6 +51,7 @@ function uploadImage($file, $uploadsDir = '../uploads/', $maxSize = 2 * 1024 * 1
                 <th>Nom du Menu</th>
                 <th>Description</th>
                 <th>Prix (€)</th>
+                <th>Voir plats </th>
                 <th>Archivé</th>
                 <th>Actions</th>
             </tr>
@@ -102,6 +72,7 @@ function uploadImage($file, $uploadsDir = '../uploads/', $maxSize = 2 * 1024 * 1
                 <td>$nomMenu</td>
                 <td>$description</td>
                 <td>$prix</td>
+                 <td><span class='cursor-pointer' onclick='openModal(\"modalMenu\")'> Voir Plat </span></td>
                 <td>$archive</td>
                 <td class='actions'>
                 <form action='' method='post'>
@@ -135,6 +106,7 @@ function uploadImage($file, $uploadsDir = '../uploads/', $maxSize = 2 * 1024 * 1
         </p>
 
         <form action="" method="post" id="platForm" class="grid grid-cols-2 gap-4" enctype="multipart/form-data">
+
             <!-- Menu -->
             <div>
                 <label for="nomMenu" class="block font-medium mb-1">Nom du Menu</label>
@@ -153,7 +125,7 @@ function uploadImage($file, $uploadsDir = '../uploads/', $maxSize = 2 * 1024 * 1
                     </textarea>
                 </div>
             <div>
-               
+                <label for="photo" class="block font-medium mb-1">Photo</label>
                 <input name="urlPhoto" type="file" accept="image/*"
                 class="inputformulaire w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm" required>
             </div>
@@ -198,15 +170,11 @@ function uploadImage($file, $uploadsDir = '../uploads/', $maxSize = 2 * 1024 * 1
                     </div>
 
                     <!-- Photo -->
-                 
-
-
                     <div class="col-span-2">
-                <label for="photo" class="block text-sm font-medium text-gray-700">Photo</label>
-                <input name="plats[photo][]" type="file" accept="image/*" class="w-full p-2 border border-gray-300 rounded-lg" required>
-            </div>
-
-
+                        <label for="photo" class="block text-sm font-medium text-gray-700">Photo</label>
+                        <input id="photo" name="plats[photo][]" type="file" accept="image/*"
+                            class="w-full p-2 border border-gray-300 rounded-lg" required>
+                    </div>
                 </div>
             </div>
 
@@ -296,18 +264,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nomMenu = mysqli_real_escape_string($conn, $_POST["nomMenu"]);
     $prix = mysqli_real_escape_string($conn, $_POST["prix"]);
     $descriptionMenu = mysqli_real_escape_string($conn, $_POST["descriptionMenu"]);
-   
-   
-    $uploadResult = uploadImage($_FILES['urlPhoto']);
-    if ($uploadResult['success']) {
-       $urlPhoto = $uploadResult['filePath'];
-       $message =  $urlPhoto; // remplacez cette variable par la variable que vous utilisez pour le message
-       echo "<script>alert('" . htmlspecialchars($message, ENT_QUOTES, 'UTF-8') . "');</script>";
+    $urlPhoto = mysqli_real_escape_string($conn, $_POST["urlPhoto"]);
 
     // Insertion du menu
     $queryMenu = "INSERT INTO menu (nomMenu, prix, description, urlPhoto) VALUES (?, ?, ?, ?)";
     $stmtMenu = mysqli_prepare($conn, $queryMenu);
-    mysqli_stmt_bind_param($stmtMenu, "sdss", $nomMenu, $prix, $descriptionMenu, $urlPhoto);
+    mysqli_stmt_bind_param($stmtMenu, "ssss", $nomMenu, $prix, $descriptionMenu, $urlPhoto);
     mysqli_stmt_execute($stmtMenu);
     $menu_id = mysqli_insert_id($conn);
 
@@ -318,51 +280,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $categories = $_POST['plats']['categorie'];
         $ingredients = $_POST['plats']['ingredient'];
         $descriptions = $_POST['plats']['description'];
-        $photos = $_FILES['plats']['photo']; // Correction
+        $photos = $_POST['plats']['photo'];
     
         for ($i = 0; $i < count($noms); $i++) {
             // Assurez-vous que toutes les données pour ce plat sont définies
-            if (!empty($noms[$i]) && !empty($categories[$i]) && !empty($ingredients[$i])) {
+            if (!empty($noms[$i]) && !empty($categories[$i]) && !empty($ingredients[$i]) && !empty($photos[$i])) {
                 $nomPlat = mysqli_real_escape_string($conn, $noms[$i]);
                 $categoriePlat = mysqli_real_escape_string($conn, $categories[$i]);
                 $ingredientPlat = mysqli_real_escape_string($conn, $ingredients[$i]);
                 $descriptionPlat = isset($descriptions[$i]) ? mysqli_real_escape_string($conn, $descriptions[$i]) : null;
+                $photoPlat = mysqli_real_escape_string($conn, $photos[$i]);
     
-                // Gestion du fichier photo
-                if (isset($photos['name'][$i]) && $photos['error'][$i] === UPLOAD_ERR_OK) {
-                    // Préparer les données pour le téléchargement
-                    $photoTmpName = $photos['tmp_name'][$i];
-                    $photoName = $photos['name'][$i];
-    
-                    // Téléchargement de l'image du plat
-                    $uploadResultPlat = uploadImage(['tmp_name' => $photoTmpName, 'name' => $photoName]);
-                    if ($uploadResultPlat['success']) {
-                        $photoPlat = $uploadResultPlat['filePath'];
-    
-                        // Insertion dans la table `plat`
-                        $queryPlat = "INSERT INTO plat (id_menu, nom, categorie, ingredient, description, photo) VALUES (?, ?, ?, ?, ?, ?)";
-                        $stmtPlat = mysqli_prepare($conn, $queryPlat);
-                        mysqli_stmt_bind_param($stmtPlat, "isssss", $menu_id, $nomPlat, $categoriePlat, $ingredientPlat, $descriptionPlat, $photoPlat);
-                        mysqli_stmt_execute($stmtPlat);
-                        mysqli_stmt_close($stmtPlat);
-                    } else {
-                        // Gestion des erreurs de téléchargement
-                        echo "<script>alert('Erreur de téléchargement pour l'image du plat " . htmlspecialchars($nomPlat, ENT_QUOTES, 'UTF-8') . "');</script>";
-                    }
-                } 
-               
+                // Insertion dans la table `plat`
+                $queryPlat = "INSERT INTO plat (id_menu, nom, categorie, ingredient, description, photo) VALUES (?, ?, ?, ?, ?, ?)";
+                $stmtPlat = mysqli_prepare($conn, $queryPlat);
+                mysqli_stmt_bind_param($stmtPlat, "isssss", $menu_id, $nomPlat, $categoriePlat, $ingredientPlat, $descriptionPlat, $photoPlat);
+                mysqli_stmt_execute($stmtPlat);
+                mysqli_stmt_close($stmtPlat);
             }
         }
     }
-    
+
     mysqli_stmt_close($stmtMenu);
-
-}
-else {
-    // Affichage du message d'erreur
-    $errorMessage = $uploadResult['message'];
-}
-
+   // header("Location: success.php"); // Redirection ou message de succès
 }
 ?>
 

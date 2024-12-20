@@ -3,15 +3,15 @@
 ob_start();
 $title = "Mes Reservations";
 session_start() ;
-    /*if($_SESSION['role']!="client"){ //client
+    if($_SESSION['role']!="client"){ //client
       header("location: ../erreur.php") ;
       exit ;
     }
     else if($_SESSION['role'] =="client"){
-       $id_user = $_SESSION['id_user'] ; 
+       $id_user = $_SESSION['id'] ; 
     }
-    echo "<p class='bg-red-400'> hello login  client </p>" ;*/
-    $_SESSION['id_user'] =  1 ; 
+  /*  echo "<p class='bg-red-400'> hello login  client </p>" ;*/
+   // $_SESSION['id_user'] =  1 ; 
 
 
     require("../db/db.php");
@@ -21,7 +21,7 @@ session_start() ;
             $id = mysqli_real_escape_string($conn, $_POST["id_reservation"]);
             $statut = mysqli_real_escape_string($conn, $_POST["id_reservation"]);
             if($statut != 'confirmée'){
-            $query = "DELETE FROM reservation WHERE id_reservation = ? AND statue_r != 'confirmée'";
+            $query = "DELETE FROM reservation WHERE id_reservation = ? AND statut_r != 'confirmée'";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, "i", $id);
             mysqli_stmt_execute($stmt);
@@ -33,7 +33,7 @@ session_start() ;
     if (isset($_POST["editReservation"])) {
         
         if (isset($_POST['id_ref']) && !empty($_POST['id_ref'])) {
-            echo "<p class='bg-red-400'>EDDDDDDDDDDDDDDDDIttttttt </p>";
+            //echo "<p class='bg-red-400'>EDDDDDDDDDDDDDDDDIttttttt </p>";
             $id_reservation = mysqli_real_escape_string($conn, $_POST["id_ref"]);
             $id_menu = trim(mysqli_real_escape_string($conn, $_POST["id_menu"]));
             $date = trim(mysqli_real_escape_string($conn, $_POST["date"]));
@@ -50,15 +50,18 @@ session_start() ;
                 tel = ? ,  
                 message = ?
             WHERE id_reservation = ?
-            and statut_r = 'confirmée'";
+            and statut_r != 'confirmée'";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, "ssiissi", $date, $heure, $nb_personne, $id_menu, $tel, $msg ,  $id_reservation );
-            if(mysqli_stmt_execute($stmt)){
-                echo "<p class='bg-red-400'>Modiffffffff</p>";
-            }else {
-                echo "<p class='bg-red-400'>ERREUR </p>";
-
-            };
+            if (mysqli_stmt_execute($stmt)) {
+                if (mysqli_affected_rows($conn) > 0) {
+                    echo "<p class='bg-green-400'>Modification réussie pour la réservation {$id_reservation}.</p>";
+                } else {
+                    echo "<p class='bg-red-400'>Aucune modification n'a été apportée à la réservation {$id_reservation}.</p>";
+                }
+            } else {
+                echo "<p class='bg-red-400'>Erreur lors de la modification de la réservation : " . mysqli_error($conn) . "</p>";
+            }
             mysqli_stmt_close($stmt);
         }
     }
@@ -99,7 +102,7 @@ session_start() ;
                   where r.id_user = ?                                  
          ";
         $stmt = mysqli_prepare($conn, $query);
-        mysqli_stmt_bind_param($stmt , "i" , $_SESSION['id_user']); 
+        mysqli_stmt_bind_param($stmt , "i" , $_SESSION['id']); 
         mysqli_stmt_execute($stmt);
         mysqli_stmt_store_result($stmt);
         if (mysqli_stmt_num_rows($stmt) > 0) {

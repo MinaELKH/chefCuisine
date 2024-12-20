@@ -14,7 +14,7 @@
         Inscrivez-vous pour un compte gratuit
       </h1>
       <div class="w-full mt-8">
-        <form action="#" method="post">
+        <form action="" method="post">
           <div class="mx-auto max-w-xs sm:max-w-md md:max-w-lg flex flex-col gap-4">
             <div>
               <label for="nom" class="text-white">Nom :</label>
@@ -56,9 +56,10 @@
   </div>
 
 <?php
-  include("../db/db.php");
 
-  if (isset($_POST["inscrir"])) {
+  include("../db/db.php");
+  //session_start() ;
+  if ( $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["inscrir"])) {
       $nom = mysqli_real_escape_string($conn, $_POST["nom"]);
       $email = mysqli_real_escape_string($conn, $_POST["email"]);
       $password = $_POST["password"];
@@ -71,8 +72,19 @@
           $query = "INSERT INTO users (nom, email, mdp ,id_role) VALUES (?, ?, ? , ?)";
           $stmt = mysqli_prepare($conn, $query);
           mysqli_stmt_bind_param($stmt, "sssi", $nom, $email, $hashed_password ,      $id_role);
-          if (mysqli_stmt_execute($stmt)) {
+          if (mysqli_stmt_execute($stmt)) { 
               echo "<p class='text-green-500 text-center'>Inscription réussie !</p>";
+              $id = mysqli_insert_id($conn)
+             //nouvelle session
+             session_start();
+             session_regenerate_id(); 
+              $_SESSION['login'] = TRUE;
+              $_SESSION['name'] = $nom;
+              $_SESSION['id'] = $id;
+               $_SESSION['role'] ="client";
+               
+
+
           } else {
               echo "<p class='text-red-500 text-center'>Erreur lors de l'inscription : " . mysqli_error($conn) . "</p>";
           }

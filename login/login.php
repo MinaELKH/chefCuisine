@@ -14,7 +14,7 @@
         Connectez-vous à votre compte
       </h1>
       <div class="w-full mt-8">
-        <form  action="../index.php"  method="post">
+        <form  action=""  method="post">
         <div class="mx-auto max-w-xs sm:max-w-md md:max-w-lg flex flex-col gap-4">
           <div>
             <label for="email" class="text-white">Email :</label>
@@ -83,12 +83,22 @@ if (isset($_POST["connecter"]) && !empty($_POST["email"]) && !empty($_POST["pass
                 {
                   echo "<p class='text-red-500 text-center'>admin.</p>";
                   $_SESSION['role'] ="admin" ;
+                 
+                 header("location:../gestion/Dashboard_chef.php") ;
                 } else if ($id_role==2) {
                   $_SESSION['role'] ="client" ;
+                  header("location:../index.php") ;
                   echo "<p class='text-red-500 text-center'>client</p>";
                 }
         } else {
-            echo "<p class='text-red-500 text-center'>Veuillez vérifier votre mot de passe.</p>";
+            header("location: login.php") ;
+            echo "<div id=\"customModal\" class=\"fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50\">
+            <div class=\"bg-white rounded-lg shadow-lg p-6\">
+                <h2 class=\"text-lg font-bold mb-4\">Attention</h2>
+                <p class=\"mb-4\">Veuillez vous verifier votre mot de passe et email.</p>
+                <button onclick=\"closeModal('customModal')\" class=\"bg-red-500 text-white px-4 py-2 rounded\">OK</button>
+            </div>
+        </div>";
         }
     } else {
         echo "<p class='text-red-500 text-center'>Veuillez vérifier votre email.</p>";

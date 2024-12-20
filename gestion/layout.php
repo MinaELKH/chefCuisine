@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -37,31 +38,35 @@
             
 
             <nav id="menu"
-                class="hidden lg:flex flex-col justify-center mx-auto items-center align-center mt-10">
-                <a href="gestionRes_Client.php"
-                    class="text-white flex items-center justify-center gap-5 m-2 w-2/3 border-2  cursor-pointer border-[#FEA116]  rounded-lg   hover:scale-[1.1]  hover:text-gray-800">
-                  
-                       Mes Reservations
-                </a>
-                
-                <a href="Dashboard_chef.php"
-                    class="text-white flex   justify-center  items-center m-2 w-2/3 border-2  cursor-pointer border-[#FEA116]  rounded-lg   hover:scale-[1.1]  hover:text-gray-800">
-                     Dashboard
-                </a>
+     class="hidden lg:flex flex-col justify-center mx-auto items-center align-center mt-10">
+    <?php
+    if ($_SESSION['role'] == "client") { // client
+        echo '<a href="gestionRes_Client.php"
+                class="text-white flex items-center justify-center gap-5 m-2 w-2/3 border-2 cursor-pointer border-[#FEA116] rounded-lg hover:scale-[1.1] hover:text-gray-800">
+                  Mes Reservations
+            </a>';
+    } elseif ($_SESSION['role'] == "admin") { // Admin
+        $id_Admin = $_SESSION['id']; 
 
-                <a href="gestionMenu_Chef.php"
-                    class="text-white flex   justify-center  items-center m-2 w-2/3 border-2  cursor-pointer border-[#FEA116]  rounded-lg   hover:scale-[1.1]  hover:text-gray-800">
-                     Menu
-                </a>
-         
-                <a href="gestionRes_Chef.php"
-                    class="text-white flex items-center m-2  justify-center    w-2/3 border-2  cursor-pointer border-[#FEA116]  rounded-lg   hover:scale-[1.1]  hover:text-gray-800">
-                      Reservations
-                </a>
-              
+        echo '<a href="Dashboard_chef.php"
+                class="text-white flex justify-center items-center m-2 w-2/3 border-2 cursor-pointer border-[#FEA116] rounded-lg hover:scale-[1.1] hover:text-gray-800">
+                  Dashboard
+            </a>';
 
-               
-            </nav>
+        echo '<a href="gestionMenu_Chef.php"
+                class="text-white flex justify-center items-center m-2 w-2/3 border-2 cursor-pointer border-[#FEA116] rounded-lg hover:scale-[1.1] hover:text-gray-800">
+                  Menu
+            </a>';
+
+        echo '<a href="gestionRes_Chef.php"
+                class="text-white flex items-center justify-center m-2 w-2/3 border-2 cursor-pointer border-[#FEA116] rounded-lg hover:scale-[1.1] hover:text-gray-800">
+                  Reservations
+            </a>';
+    }
+    ?>
+
+</nav>
+
 
 
         </aside >
@@ -74,11 +79,17 @@
             </div>
 
                 <div class="flex  lg:ml-auto lg:flex-row flex-1  items-center  justify-end">
-                        <a href="#" class="text-white w-8 h-8">
-                            <img src="../images/imgs/userChef.jpg"  alt="user logo">
-                        </a>
-                        <a class="text-3xl"><i class="fa-solid fa-user-tie"></i></a>
-
+                <?php
+                  if($_SESSION['role']=="admin"){ //admin
+                    echo"     <a  class='text-white w-12 h-12'>
+                            <img src='../images/imgs/userChef.jpg'  alt='user logo'>
+                        </a>" ;}
+                       
+                if($_SESSION['role']=="client"){ //client
+            
+                     echo"   <a class='text-4xl'><i class='fa-solid fa-user-tie'></i></a>" ;
+                    } ?>
+                         <a href='../login/deconnecter.php' class='block hover:bg-yellow-300 p-2 rounded'>se deconnecter</a>
                 </div>
                 <div id="menuBurger" class="lg:hidden bg-black text-white p-4 absolute w-1/3 top-10 right-0 hidden">
                     <nav class="flex flex-col items-center">

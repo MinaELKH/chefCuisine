@@ -1,12 +1,5 @@
 <?php
 
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-
-
 $host = "localhost";
 $user = "root";
 $pwd = "";
@@ -20,3 +13,9 @@ $conn = mysqli_connect($host, $user, $pwd, $db);
 if (!$conn) {
     die("Connexion échouée : " . mysqli_connect_error());
 }
+
+
+// erreur xampp
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
