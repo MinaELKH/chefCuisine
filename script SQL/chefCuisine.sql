@@ -51,8 +51,9 @@ CREATE TABLE reservation (
     FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE
 );
 
-
-
+alter table reservation add COLUMN tel varchar(50) not null ; 
+alter table reservation add COLUMN message text not null ; 
+alter table reservation add COLUMN archive enum('0','1') DEFAULT '0' ; 
 
 
 insert into role values(1 , "admin") ; 
@@ -71,24 +72,24 @@ VALUES
     ('Menu Prestige', '0', 75.00);
 UPDATE menu 
 SET description = 'Un menu élégant avec des plats raffinés, idéal pour les amateurs de gastronomie. Comprend une entrée, un plat principal, un dessert, et une boisson.',
-urlPhoto = '../images/imgs/fish-menu.jpg'
+urlPhoto = 'fish-menu.jpg'
 WHERE nomMenu = 'Menu Gourmet';
 UPDATE menu 
 SET description = 'Un menu luxueux proposant des mets d exception, accompagnés des fruits exotic sélectionnés pour une expérience culinaire unique. Comprend plusieurs options pour chaque service.' ,
-urlPhoto = '../images/imgs/menu-vegetarian.jpg'
+urlPhoto = 'menu-vegetarian.jpg'
 WHERE nomMenu = 'Menu Prestige';
 
 INSERT INTO menu (nomMenu, archive, prix, description, urlPhoto) 
 VALUES 
     ('Menu Découverte', '0', 40.00, 
      'Découvrez nos spécialités locales avec une entrée, un plat principal, et un dessert.', 
-     '../images/imgs/menu-decouverte.jpg'),
+     'menu-decouverte.jpg'),
     ('Menu Classique', '0', 30.00, 
      'Un menu simple et délicieux pour toute la famille, comprenant une soupe, un plat de viande ou de poisson, et un dessert.', 
-     '../images/imgs/menu-classique.jpg'),
+     'menu-classique.jpg'),
     ('Menu Gourmet', '0', 60.00, 
      'Un menu raffiné pour les gourmets, avec une sélection de mets préparés par notre chef étoilé.', 
-     '../images/imgs/menu-gourmet.jpg');
+     'menu-gourmet.jpg');
 
 
 -- Plats pour le Menu Gourmet

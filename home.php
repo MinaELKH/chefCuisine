@@ -1,6 +1,35 @@
 <?php
 session_start();
 require("db/db.php");
+
+if(isset($_POST["reserver"])) {
+  echo "<div><p>Réserver</p><div>";
+  
+  $id_menu = trim(mysqli_real_escape_string($conn, $_POST["id_menu"]));
+  $date = trim(mysqli_real_escape_string($conn, $_POST["date"]));
+  $heure = trim(mysqli_real_escape_string($conn, $_POST["heure"]));
+  $nb_personne = trim(mysqli_real_escape_string($conn, $_POST["nb_personne"]));
+  $tel = trim(mysqli_real_escape_string($conn, $_POST["tel"]));
+  $msg = trim(mysqli_real_escape_string($conn, $_POST["message"]));
+  
+  $id_user = 1; // Assurez-vous d'utiliser la bonne valeur pour l'utilisateur, comme $_SESSION["id_client"].
+
+  // Définir une valeur par défaut pour le statut
+  $statut = 'en attente';
+  
+  // Utiliser la colonne `message` en tant que chaîne vide si elle est manquante
+  $description = $msg ?: '';
+
+  // Préparer la requête d'insertion
+  $query = "INSERT INTO reservation (date_r, heure_r, nb_personne_r, statut_r, id_user, id_menu, tel, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+  $stmt = mysqli_prepare($conn, $query);
+
+  // Assurez-vous que les types correspondent aux colonnes dans la table
+  mysqli_stmt_bind_param($stmt, "ssisiiss", $date, $heure, $nb_personne, $statut, $id_user, $id_menu, $tel, $description);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -73,7 +102,7 @@ require("db/db.php");
     </nav>
 
     <!-- Hero Section -->
-    <div class='bg-[url('images/imgs/header.png')] bg-cover  py-16'>
+    <div class="bg-[url('images/imgs/header.png')] bg-cover  py-16">
       <div
         class='container mx-auto flex flex-col lg:flex-row items-center justify-between'
       >
@@ -138,8 +167,9 @@ require("db/db.php");
         }
         //   onclick='openModal(\"Menu\")'
         echo "</ul>
-        <form method='get' action='home.php?id_menu={$id}' >
-            <button type=submit name='Show_Plat_Res' class='text-[#21a9db] underline hover:scale-150 transition-transform cursor-pointer inline-block'
+        <form method='get' action='home.php' >
+             <input type='hidden' name='id_menu' value='{$id}'>
+            <button type=submit name='nom' value='{$nomMenu}' class='text-[#21a9db] underline hover:scale-150 transition-transform cursor-pointer inline-block'
             >Details</a>
         </form>
           </div>
@@ -182,7 +212,7 @@ if (isset($_GET['id_menu']) && is_numeric($_GET['id_menu'])) {
 
             echo "     <div class='grid grid-cols-2 gap-4'>
                          <div class='grid grid-cols-1 gap-4 p-6'>
-                    <h2 class='text-2xl font-bold text-gray-800 mb-4'>Menu Title</h2>";
+                    <h2 class='text-2xl font-bold text-gray-800 mb-4'>{$_GET['nom']}</h2>";
                     /* plat  */
            while (mysqli_stmt_fetch($plat_stmt)) {
                 echo "<div class='flex items-center'>
@@ -191,7 +221,7 @@ if (isset($_GET['id_menu']) && is_numeric($_GET['id_menu'])) {
                 <h5
                   class='flex justify-between items-center border-b pb-2 w-full text-lg font-medium'
                 >
-                  <span>{$nom}</span>
+                  <span>{$nom} {$categorie}</span>
                   <span class='text-blue-500 text-lg font-semibold'>{$categorie}</span>
                 </h5>
                 <small class='italic text-gray-500'
@@ -208,7 +238,7 @@ if (isset($_GET['id_menu']) && is_numeric($_GET['id_menu'])) {
                 <h2 id='menu-title' class='text-2xl font-bold  text-[#FEA116] mb-8 '>
                   Reservation
                 </h2>
-               
+               <!--  formulaire -->
                 <form method='post' class=''>
                  
                     <!-- Date & Time -->
@@ -217,16 +247,16 @@ if (isset($_GET['id_menu']) && is_numeric($_GET['id_menu'])) {
                         <label for='date' class='text-gray-900'>Date</label>
                         <input
                           type='date'
-                          id='date'
+                          name='date'
                           class='w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-primary'
                           placeholder='Date'
                         />
                       </div>
                       <div>
-                        <label for='time' class='text-gray-900'>Heure</label>
+                        <label for='heure' class='text-gray-900'>Heure</label>
                         <input
                           type='time'
-                          id='time'
+                          name='heure'
                           class='w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-primary'
                           placeholder='Heure'
                         />
@@ -238,6 +268,7 @@ if (isset($_GET['id_menu']) && is_numeric($_GET['id_menu'])) {
                         >
                         <input
                           type='number'
+                          name='nb_personne'
                           class='w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-primary'
                           placeholder='Nombre de personnes'
                         />
@@ -264,12 +295,15 @@ if (isset($_GET['id_menu']) && is_numeric($_GET['id_menu'])) {
                       </div>
                       <!-- Submit Button -->
                       <div class=''>
-                        <button
+                     
+                      <input type=hidden name='id_menu' value={$id_menu}>
+                        <button name='reserver'
                           class='btn bg-[#FEA116] text-white w-full py-3 rounded-lg transition'
                           type='submit'
                         >
                           Reserver
                         </button>
+                      
                       </div>
                     </div>
                  

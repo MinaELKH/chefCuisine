@@ -2,23 +2,23 @@
 
 ob_start();
 $title = "Gestion des reservations";
-session_start() ;
+/*session_start() ;
     if($_SESSION['role']!="admin"){ //admin
       header("location: ../erreur.php") ;
       exit ;
     }
     echo "<p class='bg-red-400'> hello login </p>" ;
 
-
+*/
     require("../db/db.php");
 
      if(isset($_POST["archive"]))
-        $id = mysqli_real_escape_string($conn ,$_POST["id"]);
+      {  $id = mysqli_real_escape_string($conn ,$_POST["id"]);
         $query  = "UPDATE menu set archive='1' where id_menu = ?" ; 
         $stmt = mysqli_prepare($conn  , $query) ;
         mysqli_stmt_bind_param($stmt , "i" , $id) ; 
         mysqli_stmt_execute($stmt); 
-        mysqli_stmt_close($stmt) ;
+        mysqli_stmt_close($stmt) ;}
     
 ?>
 
@@ -97,7 +97,7 @@ session_start() ;
     </button>
 </div>
             <form id="platForm" class="grid grid-cols-2 gap-4">
-<!--  men -->
+                <!--  menu -->
             <div>
                 <label for="nomMenu" class="block font-medium mb-1">Nom du Menu</label>
                 <input id="nomMenu" name="nomMenu" type="text" placeholder="Nom du menu"
@@ -109,51 +109,51 @@ session_start() ;
                     class="inputformulaire w-full bg-gray-50 border border-gray-300 rounded-lg p-2 text-sm">
             </div>
 
-<!--plat-->
-<div class=" col-span-2 border-2 border-orange-100 grid grid-cols-2 gap-4 p-2.5">
-            <!-- Nom du plat -->
-            <div class="col-span-2 md:col-span-1">
-                <label for="nom" class="block text-sm font-medium text-gray-700">Nom du Plat</label>
-                <input id="nom" name="nom" type="text" placeholder="Ex: Pizza Margherita"
-                    class="w-full p-2 border border-gray-300 rounded-lg" required>
-            </div>
+                    <!--plat-->
+                    <div class=" col-span-2 border-2 border-orange-100 grid grid-cols-2 gap-4 p-2.5">
+                                <!-- Nom du plat -->
+                                <div class="col-span-2 md:col-span-1">
+                                    <label for="nom" class="block text-sm font-medium text-gray-700">Nom du Plat</label>
+                                    <input id="nom" name="nom" type="text" placeholder="Ex: Pizza Margherita"
+                                        class="w-full p-2 border border-gray-300 rounded-lg" required>
+                                </div>
 
-            <!-- Catégorie -->
-            <div class="col-span-2 md:col-span-1">
-                <label for="categorie" class="block text-sm font-medium text-gray-700">Catégorie</label>
-                <input id="categorie" name="categorie" type="text" placeholder="Ex: Plat principal, Dessert"
-                    class="w-full p-2 border border-gray-300 rounded-lg" required>
-            </div>
+                                <!-- Catégorie -->
+                                <div class="col-span-2 md:col-span-1">
+                                    <label for="categorie" class="block text-sm font-medium text-gray-700">Catégorie</label>
+                                    <input id="categorie" name="categorie" type="text" placeholder="Ex: Plat principal, Dessert"
+                                        class="w-full p-2 border border-gray-300 rounded-lg" required>
+                                </div>
 
-            <!-- Ingrédients -->
-            <div class="col-span-2">
-                <label for="ingredient" class="block text-sm font-medium text-gray-700">Ingrédients</label>
-                <textarea id="ingredient" name="ingredient" rows="3" placeholder="Ex: Tomates, fromage, basilic"
-                    class="w-full p-2 border border-gray-300 rounded-lg" required></textarea>
-            </div>
+                                <!-- Ingrédients -->
+                                <div class="col-span-2">
+                                    <label for="ingredient" class="block text-sm font-medium text-gray-700">Ingrédients</label>
+                                    <textarea id="ingredient" name="ingredient" rows="3" placeholder="Ex: Tomates, fromage, basilic"
+                                        class="w-full p-2 border border-gray-300 rounded-lg" required></textarea>
+                                </div>
 
-            <!-- Description -->
-            <div class="col-span-2">
-                <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                <textarea id="description" name="description" rows="3" placeholder="Description facultative"
-                    class="w-full p-2 border border-gray-300 rounded-lg"></textarea>
-            </div>
+                                <!-- Description -->
+                                <div class="col-span-2">
+                                    <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                                    <textarea id="description" name="description" rows="3" placeholder="Description facultative"
+                                        class="w-full p-2 border border-gray-300 rounded-lg"></textarea>
+                                </div>
 
-            <!-- Photo -->
-            <div class="col-span-2">
-                <label for="photo" class="block text-sm font-medium text-gray-700">Photo</label>
-                <input id="photo" name="photo" type="file" accept="image/*"
-                    class="w-full p-2 border border-gray-300 rounded-lg" required>
-            </div>
-</div>
+                                <!-- Photo -->
+                                <div class="col-span-2">
+                                    <label for="photo" class="block text-sm font-medium text-gray-700">Photo</label>
+                                    <input id="photo" name="photo" type="file" accept="image/*"
+                                        class="w-full p-2 border border-gray-300 rounded-lg" required>
+                                </div>
+                    </div>
 
-            <!-- Bouton Ajouter -->
-            <div class="col-span-2">
-                <button type="submit"
-                    class="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 focus:outline-none">
-                    Ajouter le Menu
-                </button>
-            </div>
+                         <!-- Bouton Ajouter -->
+                        <div class="col-span-2">
+                            <button type="submit"
+                                class="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 focus:outline-none">
+                                Ajouter le Menu
+                            </button>
+                        </div>
         </form>
                
                 </div>
