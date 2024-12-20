@@ -121,7 +121,7 @@ require("db/db.php");
 
       while (mysqli_stmt_fetch($stmt)) {
         echo"
-          <div class='card'>
+          <div class='card h-[500px]'>
             <img class='card-img-top' src='$urlPhoto' alt='{$nomMenu}' />
             <div class='card-body'>
               <h5 class='card-title'>~ {$nomMenu} ~</h5>
@@ -147,8 +147,10 @@ require("db/db.php");
         echo "</ul>
         <form method='get' action='index.php' >
              <input type='hidden' name='id_menu' value='{$id}'>
-            <button type=submit name='nom' value='{$nomMenu}' class='text-[#21a9db] underline hover:scale-150 transition-transform cursor-pointer inline-block'
-            >Details</a>
+            <button type=submit name='nom' value='{$nomMenu}' class=' text-end text-[#21a9db] underline hover:scale-150 transition-transform cursor-pointer inline-block'
+            >Details</button>
+
+            
         </form>
           </div>
         </div>";
@@ -226,7 +228,7 @@ if (isset($_GET['id_menu']) && is_numeric($_GET['id_menu'])) {
                     <h2 class='text-2xl font-bold text-gray-800 mb-4'>{$_GET['nom']}</h2>";
                     /* plat  */
            while (mysqli_stmt_fetch($plat_stmt)) {
-                echo "<div class='flex items-center'>
+                echo "<div class='flex items-center '>
                         <img class='w-20 h-20 rounded' src='images/$photo' alt='$nom' />
                        <div class='flex flex-col justify-start pl-4 w-full'>
                 <h5
