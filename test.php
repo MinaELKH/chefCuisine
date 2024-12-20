@@ -12,8 +12,9 @@ $title = "Gestion des reservations";
      <div class="relative p-6   border-gray-300  border-2 shadow-xl rounded-lg bg-white text-gray-900 overflow-y-auto lg:w-1/3 max-h-[calc(100vh-210px)] ">
 
         <span id="closeModal"
-            class="absolute right-4 top-4 text-gray-600 hover:text-gray-900 cursor-pointer material-symbols-outlined text-2xl">
-            cancel
+            class="absolute right-4 top-4 text-gray-600 hover:text-gray-900 cursor-pointer material-symbols-outlined text-2xl"
+            >
+          close
         </span>
         <h2 class="text-2xl font-bold mb-6 text-center text-yellow-500">Ajouter un Menu</h2>
         <p id="errorMsg"
@@ -45,8 +46,14 @@ $title = "Gestion des reservations";
             </div>
             <!-- Plat -->
             <div id="divPlats" class="col-span-2 flex flex-col gap-2.5 ">
-                <div id="plat" class=" bg-gray-300 border-2 border-orange-100 grid grid-cols-2 gap-4 p-2.5">
-                    <!-- Nom du plat -->
+          
+                <div id="firstplat" class="relative bg-gray-300 border-2 border-orange-100 grid grid-cols-2 gap-4 p-2.5">
+                <span 
+                class=" removePlat absolute right-1 top-1 text-red-600 hover:text-gray-900 cursor-pointer material-symbols-outlined text-xl">
+            cancel
+        </span>
+                
+                <!-- Nom du plat -->
                     <div class="col-span-2 md:col-span-1">
                         <label for="nom" class="block text-sm font-medium text-gray-700">Nom du Plat</label>
                         <input id="nom" name="plats[nom][]" type="text" placeholder="Ex: Pizza Margherita"
@@ -88,7 +95,7 @@ $title = "Gestion des reservations";
                     class="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 focus:outline-none">
                     Ajouter le Menu
                 </button>
-                <button type="button" id="addPlat"
+                <button type="button" id="addPlat_Btn"
                     class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded-lg">
                     +
                 </button>
@@ -100,13 +107,20 @@ $title = "Gestion des reservations";
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const divPlats = document.getElementById('divPlats');
-            const addFieldButton = document.getElementById('addPlat');
-
-            addFieldButton.addEventListener('click', function() {
+            const addPlat_Btn = document.getElementById('addPlat_Btn');
+            const firstplat = document.getElementById('firstplat');
+            firstplat.querySelector('.removePlat').addEventListener('click', function() {
+                    divPlats.removeChild(firstplat);
+                });
+            addPlat_Btn.addEventListener('click', function() {
                 const newPlat = document.createElement('div');
-                newPlat.className = 'bg-gray-300 border-2 border-orange-100 grid grid-cols-2 gap-4 p-2.5';
+                newPlat.className = 'relative bg-gray-300 border-2 border-orange-100 grid grid-cols-2 gap-4 p-2.5';
                 newPlat.innerHTML = ` 
                     <!-- Nom du plat -->
+                     <span 
+            class=" removePlat absolute right-1 top-1 text-red-600 hover:text-gray-900 cursor-pointer material-symbols-outlined text-xl">
+            cancel
+        </span>
                     <div class="col-span-2 md:col-span-1">
                         <label for="nom" class="block text-sm font-medium text-gray-700">Nom du Plat</label>
                         <input  name="plats[nom][]" type="text" placeholder="Ex: Pizza Margherita"
@@ -144,8 +158,8 @@ $title = "Gestion des reservations";
                 divPlats.appendChild(newPlat);
 
                 // Ajout de l'écouteur d'événements de suppression
-                newPlat.querySelector('.removeField').addEventListener('click', function() {
-                    divPlat.removeChild(newPlat);
+                newPlat.querySelector('.removePlat').addEventListener('click', function() {
+                    divPlats.removeChild(newPlat);
                 });
             });
         });
@@ -200,7 +214,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     mysqli_stmt_close($stmtMenu);
-    header("Location: success.php"); // Redirection ou message de succès
+   // header("Location: success.php"); // Redirection ou message de succès
 }
 ?>
 

@@ -56,10 +56,10 @@ if(isset($_POST["reserver"])) {
         <!-- Favicon -->
         <link href='img/favicon.ico' rel='icon'>
         <!-- Inclure le CSS de Font Awesome -->
-<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css'>
-
+      <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css'>
+      <script src="js/main.js"  defer></script>
   </head>
-  <body class='bg-gray-100 font-merienda lg:mx-16 px-2.5'>
+  <body id="pageHome" class='bg-gray-100 font-merienda lg:mx-16 px-2.5'>
 
   <!-- Navbar -->
     <nav
@@ -195,7 +195,8 @@ if (isset($_GET['id_menu']) && is_numeric($_GET['id_menu'])) {
     
     echo "<div id='modal' class='fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50'>
           <div class='bg-white w-full max-w-4xl rounded-lg shadow-lg relative'>
-            <button id='close-modal' class='absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-2xl' onclick='closeModal()'>
+            <button  class='absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-2xl' 
+            onclick='closeModal(\"modal\")'>
               &times;
             </button>";
 
@@ -350,182 +351,6 @@ if (isset($_GET['id_menu']) && is_numeric($_GET['id_menu'])) {
       </div>
     </div>
 
-    <!-- Modal  plat et reservation  -->
-
-    <div id='modal'  class='hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50' >
-      <div class='bg-white w-full max-w-4xl rounded-lg shadow-lg relative'>
-        <!-- Close Button -->
-        <button
-          id='close-modal'
-          class='absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-2xl'
-          onclick='closeModal()'
-        >
-          &times;
-        </button>
-        <!-- Modal Title -->
-   
-        <!-- Dishes -->
-        <div class='grid grid-cols-2 gap-4'>
-          <div class='grid grid-cols-1 gap-4 p-6'>
-            <h2 id='menu-title' class='text-2xl font-bold text-gray-800 mb-4'>
-              Menu Title
-            </h2>
-            <!-- Item 1 -->
-            <div class='flex items-center'>
-              <img
-                class='flex-shrink-0 w-20 h-20 rounded'
-                src='images/imgs/imgs/menu-1.jpg'
-                alt='Menu 1'
-              />
-              <div class='flex flex-col justify-start pl-4 w-full'>
-                <h5
-                  class='flex justify-between items-center border-b pb-2 w-full text-lg font-medium'
-                >
-                  <span>Chicken Burger</span>
-                  <span class='text-blue-500 text-lg font-semibold'>plat principal</span>
-                </h5>
-                <small class='italic text-gray-500'
-                  >Ipsum ipsum clita erat amet dolor justo diam</small
-                >
-              </div>
-            </div>
-            <!-- Item 2 -->
-            <div class='flex items-center'>
-              <img
-                class='flex-shrink-0 w-20 h-20 rounded'
-                src='images/imgs/imgs/menu-2.jpg'
-                alt='Menu 2'
-              />
-              <div class='flex flex-col justify-start pl-4 w-full'>
-                <h5
-                  class='flex justify-between items-center border-b pb-2 w-full text-lg font-medium'
-                >
-                  <span>Chicken Burger</span>
-                  <span class='text-blue-500 text-lg font-semibold'>entree</span>
-                </h5>
-                <small class='italic text-gray-500'
-                  >Ipsum ipsum clita erat amet dolor justo diam</small
-                >
-              </div>
-            </div>
-            <!-- Item 3 -->
-            <div class='flex items-center'>
-              <img
-                class='flex-shrink-0 w-20 h-20 rounded'
-                src='images/imgs/imgs/menu-3.jpg'
-                alt='Menu 3'
-              />
-              <div class='flex flex-col justify-start pl-4 w-full'>
-                <h5
-                  class='flex justify-between items-center border-b pb-2 w-full text-lg font-medium'
-                >
-                  <span>Chicken Burger</span>
-                  <span class='text-blue-500 text-lg font-semibold'>Amuse Bouche</span>
-                </h5>
-                <small class='italic text-gray-500'
-                  >Ipsum ipsum clita erat amet dolor justo diam</small
-                >
-              </div>
-            </div>
-            <!-- Item 4 -->
-            <div class='flex items-center'>
-              <img
-                class='flex-shrink-0 w-20 h-20 rounded'
-                src='images/imgs/imgs/menu-4.jpg'
-                alt='Menu 4'
-              />
-              <div class='flex flex-col justify-start pl-4 w-full'>
-                <h5
-                  class='flex justify-between items-center border-b pb-2 w-full text-lg font-medium'
-                >
-                  <span>Chicken Burger</span>
-                  <span class='text-blue-500 text-lg font-semibold'>Desert</span>
-                </h5>
-                <small class='italic text-gray-500'
-                  >Ipsum ipsum clita erat amet dolor justo diam</small
-                >
-              </div>
-            </div>
-          </div>
-
-          <div class='grid grid-cols-1 gap-4 border-l-2 border-l-yellow-200 '>
-            <div class=' flex items-center'>
-              <div class='p-6'>
-                <h2 id='menu-title' class='text-2xl font-bold  text-[#FEA116] mb-8 '>
-                  Reservation
-                </h2>
-               
-                <form method="post" class=''>
-                 
-                    <!-- Date & Time -->
-                    <div class='flex flex-col gap-4 '>
-                      <div>
-                        <label for='date' class='text-gray-900'>Date</label>
-                        <input
-                          type='date'
-                          id='date'
-                          class='w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-primary'
-                          placeholder='Date'
-                        />
-                      </div>
-                      <div>
-                        <label for='time' class='text-gray-900'>Heure</label>
-                        <input
-                          type='time'
-                          id='time'
-                          class='w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-primary'
-                          placeholder='Heure'
-                        />
-                      </div>
-
-                      <div class=''>
-                        <label for='select1' class='text-gray-900'
-                          >Nombre de personnes</label
-                        >
-                        <input
-                          type='number'
-                          class='w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-primary'
-                          placeholder='Nombre de personnes'
-                        />
-                      </div>
-
-                      <div>
-                        <label for='tel' class='text-gray-900'>Téléphone :</label>
-                        <input  name='tel'
-                        class='w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-primary'
-                          type='tel'
-                          placeholder='Votre numéro de téléphone' />
-                      </div>
-                      <!-- Special Request -->
-                      <div class=''>
-                        <label for='message' class='text-gray-900'
-                          >Message</label
-                        >
-                        <textarea
-                          class='form-control w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-primary'
-                          name='message'
-                          placeholder='Message'
-                          style='height: 100px'
-                        ></textarea>
-                      </div>
-                      <!-- Submit Button -->
-                      <div class=''>
-                        <button
-                          class='btn bg-[#FEA116] text-white w-full py-3 rounded-lg transition'
-                          type='submit'
-                        >
-                          Reserver
-                        </button>
-                      </div>
-                    </div>
-                 
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 <!-- footer -->
     <div class='container-fluid bg-[#0f172b]     text-white  px-10 pt-5 mt-5'>
         <div class='container py-5'>
@@ -582,31 +407,5 @@ if (isset($_GET['id_menu']) && is_numeric($_GET['id_menu'])) {
     </div>
     
 
-    <script>  
-      function openModal(menuTitle) {
-        document.getElementById('modal').classList.remove('hidden');
-      }
-
-      function closeModal() {
-        document.getElementById('modal').classList.add('hidden');
-      }
- 
-    
-      const menuToggle = document.getElementById('menuToggle');
-      const dropdownMenu = document.getElementById('dropdownMenu');
-    
-
-      menuToggle.addEventListener('click', (event) => {
-        event.preventDefault(); // 
-        dropdownMenu.classList.toggle('hidden'); 
-      });
-    
-    
-      document.addEventListener('click', (event) => {
-        if (!menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
-          dropdownMenu.classList.add('hidden'); 
-        }
-      });
-    </script>
   </body>
 </html>

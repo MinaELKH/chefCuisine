@@ -7,7 +7,7 @@ session_start() ;
       header("location: ../erreur.php") ;
       exit ;
     }
-    echo "<p class='bg-red-400'> hello login </p>" ;*/
+    echo "<p class='bg-red-400'> hello login admin </p>" ;*/
 
 
     require("../db/db.php");
@@ -39,12 +39,8 @@ session_start() ;
 ?>
 
 
-<?php
-
-?>
-
 <div class='listeTable'>
-    <h2>Liste des Réservations</h2>
+  
     <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
         <thead class="bg-gray-200">
             <tr>

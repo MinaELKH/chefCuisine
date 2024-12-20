@@ -123,3 +123,25 @@ VALUES
      'Une tarte classique aux pommes caramélisées.', 
      4, 'tarte_tatin.jpg');
 
+
+## inseration ds reservation pour user_id = 1 
+INSERT INTO reservation (date_r, heure_r, nb_personne_r, statut_r, id_user, id_menu)
+VALUES
+('2024-12-15', '17:00:00', 2, 'confirmée', 1, 1),
+('2024-12-16', '19:30:00', 4, 'en attente', 1, 2),  
+('2024-12-17', '20:00:00', 3, 'confirmée', 1, 3),  
+('2024-12-18', '18:30:00', 5, 'confirmée', 1, 4),  
+('2024-12-19', '21:00:00', 2, 'en attente', 1, 5), 
+('2024-12-20', '17:30:00', 6, 'confirmée', 1, 1),  
+('2024-12-21', '19:00:00', 4, 'confirmée', 1, 2),  
+('2024-12-22', '20:30:00', 3, 'en attente', 1, 3),  
+('2024-12-23', '18:00:00', 5, 'confirmée', 1, 4), 
+('2024-12-24', '21:30:00', 2, 'confirmée', 1, 5); 
+
+
+## select prochaine reservation 
+select * from reservation 
+where date_r >= CURRENT_DATE()
+and statut_r = "confirmée"
+order by date_r ASC
+limit 1        il affiche la prochaine reservation ; 

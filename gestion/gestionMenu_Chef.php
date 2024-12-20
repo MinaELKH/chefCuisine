@@ -23,6 +23,23 @@ $title = "Gestion des reservations";
 ?>
 
 
+<div class=" flex justify-between lg:mx-20  mb-8      p-2 border-b-2 border-y-indigo-300  ">
+ 
+<h2 class="text-2xl text-indigo-800  "> <?php echo $title; ?></h2>
+<div > 
+    <button class=" flex flex-row justify-around gap-2.5 text-indigo-900   hover:text-green-500 " 
+    onclick="openModal('modal')">
+            <span class="material-symbols-outlined  ">
+              add_task
+            </span><p> Ajouter Menu<p>
+          </button>
+        
+        </div>     
+
+
+</div>
+
+
 <div class='listeTable' >
 <h2>Liste des Menus</h2>
     <table>
@@ -82,7 +99,8 @@ $title = "Gestion des reservations";
 <div id="modal" class=" hidden fixed inset-0 flex items-center z-50 justify-center bg-white bg-opacity-50">
     <div class="relative p-6 shadow-xl rounded-lg bg-white text-gray-900 overflow-y-auto lg:w-1/3">
         <span id="closeModal"
-            class="absolute right-4 top-4 text-gray-600 hover:text-gray-900 cursor-pointer material-symbols-outlined text-2xl">
+            class="absolute right-4 top-4 text-gray-600 hover:text-gray-900 cursor-pointer material-symbols-outlined text-2xl"
+            onclick='closeModal("modal")'>
             cancel
         </span>
         <h2 class="text-2xl font-bold mb-6 text-center text-yellow-500">Ajouter un Menu</h2>

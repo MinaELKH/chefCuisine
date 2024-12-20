@@ -11,7 +11,7 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <title>ChefCuisine</title>
-    <link rel="icon" href="../images/logo1.png" type="image/png">
+    <link rel="icon" href="../images/imgs/logo1.png" type="image/png">
 
     <link href="https://fonts.googleapis.com/css2?family=Merienda:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
@@ -32,7 +32,7 @@
     <div class=" flex ">
         <aside class="hidden lg:block   bg-[#0f172b]     border-2 border-orange-100 rounded-xl w-1/5 p-2 pt-10">
             <div class="">
-                <img class="  mx-auto  w-24 h-12 " src="../images/logo1.png"  alt="logo">
+                <img class="  mx-auto  w-24 h-12 " src="../images/imgs/logo1.png"  alt="logo">
             </div>
             
 
@@ -70,12 +70,12 @@
             
                 <div class=" mx-auto flex justify-between items-center">
                 <div >
-                <img class="lg:hidden mx-auto" src="../images/logo1.png" width="150" alt="logo">
+                <img class="lg:hidden mx-auto" src="../images/imgs/logo1.png" width="150" alt="logo">
             </div>
 
                 <div class="flex  lg:ml-auto lg:flex-row flex-1  items-center  justify-end">
                         <a href="#" class="text-white w-8 h-8">
-                            <img src="../images/userChef.jpg"  alt="user logo">
+                            <img src="../images/imgs/userChef.jpg"  alt="user logo">
                         </a>
                         <a class="text-3xl"><i class="fa-solid fa-user-tie"></i></a>
 
@@ -115,19 +115,6 @@
           
             
 
-             <div class=" flex justify-between lg:mx-20  mb-8      p-2 border-b-2 border-y-indigo-300  ">
-
-
-             <h2 class="text-2xl text-indigo-800  "> <?php //echo $title; ?></h2>
-          <div > <button class=" flex flex-row justify-around gap-2.5 text-indigo-900   hover:text-green-500 "  id="ShowForm">
-            <span class="material-symbols-outlined  ">
-              add_task
-            </span><p> Ajouter Menu<p>
-          </button></div>
-          
-                 <?php // if($title=="Gestion des reservations") {echo $serachActivite;} ?>
-
-         </div>
          
                
           

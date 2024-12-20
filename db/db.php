@@ -10,11 +10,11 @@ error_reporting(E_ALL);
 $host = "localhost";
 $user = "root";
 $pwd = "";
-$db = "chefCuisine1";
+$db = "chefCuisine2";
 
 // Connexion à la base de données
 $conn = mysqli_connect($host, $user, $pwd, $db);
-echo("Connexion reusi : " );
+//echo("Connexion reusi : " );
 
 // Vérification de la connexion
 if (!$conn) {
