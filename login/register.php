@@ -4,11 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inscription</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
   <div class="flex flex-col justify-center items-center w-full h-[100vh] bg-[#282D2D] px-5">
-    <div class="flex flex-col items-end justify-start overflow-hidden mb-2 xl:max-w-3xl w-full"></div>
+    <div class="flex flex-col items-end justify-start overflow-hidden mb-2 xl:max-w-3xl w-full">
+    <a href="../index.php" class="flex items-center space-x-4 text-white">
+             <i class="fas fa-home"></i>
+            <span>Accueil</span>
+        </a> 
+
+    </div>
     <div class="w-full p-5 sm:p-10 rounded-md">
       <h1 class="text-center text-xl sm:text-3xl font-semibold text-white">
         Inscrivez-vous pour un compte gratuit
